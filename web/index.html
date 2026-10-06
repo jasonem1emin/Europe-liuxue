@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>欧洲硕士规划台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700&family=Noto+Serif+SC:wght@600;700&display=swap">
+<style>:root{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);color-scheme:light}body{margin:0;background:#f5f6f8}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+  /* Layout: header band + two columns — intake form left, live output panel right (sticky on desktop, stacked on mobile) */
+  :root {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --surface-2: #eef1f4;
+    --fg: #16202c;
+    --muted: #5a6573;
+    --border: #e0e4ea;
+    --ink: #163250;        /* deep navy — structural headings */
+    --accent: #b9752a;     /* warm brass */
+    --accent-soft: #f3e4d2;
+    --good: #2e7d5b;
+    --warn: #b5501f;
+    --shadow: 0 1px 2px rgba(22,50,80,.06), 0 8px 24px rgba(22,50,80,.07);
+    --sans: "Noto Sans SC", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    --serif: "Noto Serif SC", Georgia, "Songti SC", serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1620; --surface: #16212e; --surface-2: #1d2a39; --fg: #e6eaf0;
+      --muted: #97a3b2; --border: #27374a; --ink: #ccd9e8; --accent: #e0a45a;
+      --accent-soft: #352518; --good: #5ec08c; --warn: #e08a52;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1620; --surface: #16212e; --surface-2: #1d2a39; --fg: #e6eaf0;
+    --muted: #97a3b2; --border: #27374a; --ink: #ccd9e8; --accent: #e0a45a;
+    --accent-soft: #352518; --good: #5ec08c; --warn: #e08a52;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.6; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding-block: 0 56px; padding-left: 16px; padding-right: 16px; }
+
+  /* Header */
+  header.hero { padding-block: 34px 22px; border-bottom: 1px solid var(--border); margin-bottom: 26px; }
+  .eyebrow { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 0 0 8px; }
+  h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(26px, 4.6vw, 40px); line-height: 1.15; color: var(--ink); margin: 0 0 12px; text-wrap: balance; }
+  .lede { color: var(--muted); max-width: 62ch; margin: 0; font-size: 15px; }
+  .theme-btn { position: absolute; top: 14px; right: 16px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 12px; cursor: pointer; }
+  header.hero { position: relative; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: 1.15fr .95fr; gap: 28px; align-items: start; }
+  @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+
+  /* Form */
+  form { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+  fieldset { border: 1px solid var(--border); border-radius: 14px; background: var(--surface); padding: 20px; margin: 0; box-shadow: var(--shadow); }
+  legend { font-family: var(--serif); font-weight: 700; color: var(--ink); padding: 0 8px; font-size: 16px; }
+  legend .n { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 6px; }
+  .row { display: grid; gap: 14px; }
+  .row.two { grid-template-columns: 1fr 1fr; }
+  .row.three { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 520px) { .row.two, .row.three { grid-template-columns: 1fr; } }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  label { font-size: 13px; font-weight: 600; color: var(--fg); }
+  label .opt { color: var(--muted); font-weight: 400; }
+  .hint { font-size: 12px; color: var(--muted); }
+  input[type=text], input[type=number], select, textarea {
+    font: inherit; font-size: 14px; color: var(--fg); background: var(--surface);
+    border: 1px solid var(--border); border-radius: 9px; padding: 9px 11px; width: 100%; min-width: 0;
+  }
+  textarea { resize: vertical; min-height: 72px; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+
+  /* Chips (multi/single select) */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 1px solid var(--border); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 7px 13px; font: inherit; font-size: 13px; cursor: pointer; transition: .12s; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip[aria-pressed="true"] { color: #1a1206; } }
+  :root[data-theme="dark"] .chip[aria-pressed="true"] { color: #1a1206; }
+
+  /* Priority reorder list */
+  .pri { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .pri li { display: flex; align-items: center; gap: 10px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 9px; padding: 8px 10px; }
+  .pri .rank { width: 22px; height: 22px; flex: none; display: grid; place-items: center; background: var(--accent); color: #fff; border-radius: 6px; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pri .rank { color: #1a1206; } }
+  :root[data-theme="dark"] .pri .rank { color: #1a1206; }
+  .pri .name { flex: 1; font-size: 13px; }
+  .pri .mv { border: 1px solid var(--border); background: var(--surface); color: var(--muted); border-radius: 6px; width: 28px; height: 26px; cursor: pointer; font-size: 13px; line-height: 1; }
+  .pri .mv:disabled { opacity: .35; cursor: default; }
+
+  /* Output panel */
+  .panel { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 14px); background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  @media (max-width: 880px) { .panel { position: static; } }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tab { flex: 1; border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 600; font-size: 13px; padding: 13px 8px; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+  .panel-body { padding: 16px; }
+  .tray { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .btn { border: 1px solid var(--accent); background: var(--accent); color: #fff; border-radius: 9px; padding: 9px 15px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn { color: #1a1206; } }
+  :root[data-theme="dark"] .btn { color: #1a1206; }
+  .btn.ghost { background: transparent; color: var(--accent); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  pre.out { white-space: pre-wrap; word-break: break-word; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; line-height: 1.55; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin: 0; max-height: 62vh; overflow: auto; color: var(--fg); }
+  .ai-out { font-size: 14px; line-height: 1.7; max-height: 62vh; overflow: auto; }
+  .ai-out h3 { font-family: var(--serif); color: var(--ink); font-size: 15px; margin: 16px 0 6px; }
+  .ai-out p { margin: 0 0 10px; }
+  .notice { font-size: 12px; color: var(--muted); background: var(--accent-soft); border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px; margin-bottom: 12px; }
+  .notice b { color: var(--warn); }
+  .placeholder { color: var(--muted); font-size: 13px; padding: 10px 0; }
+  .toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom,0px) + 20px); transform: translateX(-50%); background: var(--ink); color: #fff; padding: 9px 16px; border-radius: 999px; font-size: 13px; box-shadow: var(--shadow); opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-3px); }
+  footer { color: var(--muted); font-size: 12px; margin-top: 30px; border-top: 1px solid var(--border); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <button class="theme-btn" id="themeBtn" type="button">切换主题</button>
+    <p class="eyebrow">欧洲研究生留学 · 智能规划</p>
+    <h1>欧洲硕士规划台</h1>
+    <p class="lede">填写你的本科背景、成绩、预算与目标，即时生成一份为你量身定制、可直接复制去联网 Claude 跑真实方案的指令。也可点「AI 初步评估」在页面内先听听方向性建议。</p>
+  </header>
+
+  <div class="grid">
+    <!-- ============ FORM ============ -->
+    <form id="f" autocomplete="off">
+      <fieldset>
+        <legend><span class="n">1</span>学术背景</legend>
+        <div class="row two">
+          <div class="field">
+            <label for="school">本科院校全名</label>
+            <input type="text" id="school" placeholder="如：武汉大学">
+          </div>
+          <div class="field">
+            <label for="tier">院校层次</label>
+            <select id="tier">
+              <option value="">请选择</option>
+              <option>985</option><option>211（非985）</option><option>双一流</option>
+              <option>普通一本</option><option>二本</option><option>中外合办</option>
+              <option>海外本科</option><option>其他/不确定</option>
+            </select>
+          </div>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <div class="field">
+            <label for="major">本科专业（含方向）</label>
+            <input type="text" id="major" placeholder="如：电子信息工程">
+          </div>
+        </div>
+        <div class="row three" style="margin-top:14px">
+          <div class="field">
+            <label for="gpa">GPA / 均分</label>
+            <input type="text" id="gpa" placeholder="如：86 或 3.6">
+          </div>
+          <div class="field">
+            <label for="gpaScale">制式</label>
+            <select id="gpaScale"><option value="">—</option><option>百分制</option><option>4.0 制</option><option>4.5 制</option><option>其他</option></select>
+          </div>
+          <div class="field">
+            <label for="gpaMethod">算法</label>
+            <select id="gpaMethod"><option value="">—</option><option>算术平均</option><option>加权平均</option><option>不确定</option></select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="n">2</span>语言与标化</legend>
+        <div class="row three">
+          <div class="field">
+            <label for="langType">语言考试</label>
+            <select id="langType"><option value="">请选择</option><option>雅思</option><option>托福</option><option>德福</option><option>其他</option><option>暂无成绩</option></select>
+          </div>
+          <div class="field">
+            <label for="langScore">成绩 <span class="opt">（可含小分）</span></label>
+            <input type="text" id="langScore" placeholder="如：7.0 (6.5)">
+          </div>
+          <div class="field">
+            <label for="langPlan">计划考试时间 <span class="opt">（如暂无）</span></label>
+            <input type="text" id="langPlan" placeholder="如：2026-03">
+          </div>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <div class="field">
+            <label for="gre">GRE / GMAT <span class="opt">（如有）</span></label>
+            <input type="text" id="gre" placeholder="如：GRE 320 / GMAT 700">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="n">3</span>目标</legend>
+        <div class="field">
+          <label>目标国家 / 地区 <span class="opt">（可多选，或选「帮我推荐」）</span></label>
+          <div class="chips" id="countries" role="group" aria-label="目标国家"></div>
+        </div>
+        <div class="row two" style="margin-top:16px">
+          <div class="field">
+            <label for="targetMajor">目标专业方向</label>
+            <input type="text" id="targetMajor" placeholder="如：数据科学">
+          </div>
+          <div class="field">
+            <label>是否接受跨专业</label>
+            <div class="chips" id="crossMajor" role="group" aria-label="跨专业"></div>
+          </div>
+        </div>
+        <div class="row two" style="margin-top:14px">
+          <div class="field">
+            <label for="intakeYear">入学时间</label>
+            <input type="text" id="intakeYear" placeholder="如：2027 秋">
+          </div>
+          <div class="field">
+            <label>长期目标</label>
+            <div class="chips" id="goal" role="group" aria-label="长期目标"></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="n">4</span>预算</legend>
+        <div class="row three">
+          <div class="field">
+            <label>预算涵盖</label>
+            <div class="chips" id="budgetScope" role="group" aria-label="预算涵盖"></div>
+          </div>
+          <div class="field">
+            <label for="budgetAmt">金额</label>
+            <input type="text" id="budgetAmt" placeholder="如：25 万">
+          </div>
+          <div class="field">
+            <label for="budgetCur">币种 / 周期</label>
+            <input type="text" id="budgetCur" placeholder="如：人民币/年">
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>奖学金需求</label>
+          <div class="chips" id="scholar" role="group" aria-label="奖学金需求"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="n">5</span>软背景</legend>
+        <div class="field">
+          <label for="soft">科研 / 实习 / 竞赛 / 论文 / 工作经历</label>
+          <textarea id="soft" placeholder="简要列出，如：1 段算法实习；1 篇在投论文；全国数学建模二等奖"></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="n">6</span>优先级排序</legend>
+        <p class="hint" style="margin:0 0 12px">用 ↑ ↓ 调整顺序，越靠上越重要。</p>
+        <ul class="pri" id="pri"></ul>
+      </fieldset>
+    </form>
+
+    <!-- ============ OUTPUT PANEL ============ -->
+    <div class="panel">
+      <div class="tabs" role="tablist">
+        <button class="tab" id="tabPrompt" role="tab" aria-selected="true" aria-controls="viewPrompt">生成的指令</button>
+        <button class="tab" id="tabAI" role="tab" aria-selected="false" aria-controls="viewAI">AI 初步评估</button>
+      </div>
+
+      <div class="panel-body">
+        <!-- Prompt view -->
+        <section id="viewPrompt" role="tabpanel" aria-labelledby="tabPrompt">
+          <div class="tray">
+            <button class="btn" id="copyBtn" type="button">复制指令</button>
+            <button class="btn ghost" id="resetBtn" type="button">清空重填</button>
+          </div>
+          <p class="hint" style="margin:0 0 10px">把下面整段复制到一个<b>能联网</b>的 Claude 对话里即可运行。</p>
+          <pre class="out" id="promptOut"></pre>
+        </section>
+
+        <!-- AI view -->
+        <section id="viewAI" role="tabpanel" aria-labelledby="tabAI" hidden>
+          <div class="notice" id="aiNotice">
+            这里的评估是 <b>方法论层面的方向性建议</b>（竞争力画像、国家匹配、策略）。页面内的 AI <b>不能联网</b>，所以<b>不会</b>给出具体项目名/学费/截止日期——那些请用左侧生成的指令，拿去联网的 Claude 做核实版。
+          </div>
+          <div class="tray">
+            <button class="btn" id="askBtn" type="button">生成初步评估</button>
+            <button class="btn ghost" id="stopBtn" type="button" hidden>停止</button>
+          </div>
+          <div class="ai-out" id="aiOut"><p class="placeholder">填好左侧表单后，点「生成初步评估」。</p></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    建议配合联网模型使用。学费、截止日期、项目是否开设每年变动——一切以大学官网与招生办为准。本工具仅提供决策参考，不承诺录取结果。
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var LS_KEY = "eu-advisor-draft-v1";
+
+  /* ---------- chip groups ---------- */
+  var COUNTRIES = ["帮我推荐","德国","荷兰","法国","北欧(瑞典/丹麦/芬兰/挪威)","瑞士","爱尔兰","意大利","西班牙","英国"];
+  var state = {
+    countries: [], crossMajor: "", goal: "", budgetScope: "", scholar: "",
+    priorities: ["排名","费用","就业前景","移民/工签","英语授课","城市/生活","奖学金"]
+  };
+
+  function buildChips(hostId, items, key, multi) {
+    var host = $(hostId);
+    host.innerHTML = "";
+    items.forEach(function (it) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "chip"; b.textContent = it;
+      b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", function () {
+        if (multi) {
+          var i = state[key].indexOf(it);
+          if (i >= 0) state[key].splice(i, 1); else state[key].push(it);
+        } else {
+          state[key] = (state[key] === it) ? "" : it;
+        }
+        syncChips(hostId, items, key, multi);
+        update();
+      });
+      host.appendChild(b);
+    });
+  }
+  function syncChips(hostId, items, key, multi) {
+    var host = $(hostId);
+    Array.prototype.forEach.call(host.children, function (b, idx) {
+      var on = multi ? state[key].indexOf(items[idx]) >= 0 : state[key] === items[idx];
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  buildChips("countries", COUNTRIES, "countries", true);
+  buildChips("crossMajor", ["接受跨专业","不跨专业"], "crossMajor", false);
+  buildChips("goal", ["回国就业","欧洲就业","继续读博","移民","未定"], "goal", false);
+  buildChips("budgetScope", ["仅学费","学费+生活费"], "budgetScope", false);
+  buildChips("scholar", ["必须有","最好有","无所谓"], "scholar", false);
+
+  /* ---------- priority list ---------- */
+  function renderPri() {
+    var ul = $("pri"); ul.innerHTML = "";
+    state.priorities.forEach(function (name, i) {
+      var li = document.createElement("li");
+      var rank = document.createElement("span"); rank.className = "rank"; rank.textContent = i + 1;
+      var nm = document.createElement("span"); nm.className = "name"; nm.textContent = name;
+      var up = document.createElement("button"); up.className = "mv"; up.type = "button"; up.textContent = "↑"; up.disabled = i === 0;
+      up.setAttribute("aria-label", "上移 " + name);
+      var dn = document.createElement("button"); dn.className = "mv"; dn.type = "button"; dn.textContent = "↓"; dn.disabled = i === state.priorities.length - 1;
+      dn.setAttribute("aria-label", "下移 " + name);
+      up.addEventListener("click", function () { swap(i, i - 1); });
+      dn.addEventListener("click", function () { swap(i, i + 1); });
+      li.appendChild(rank); li.appendChild(nm); li.appendChild(up); li.appendChild(dn);
+      ul.appendChild(li);
+    });
+  }
+  function swap(a, b) {
+    var p = state.priorities; var t = p[a]; p[a] = p[b]; p[b] = t;
+    renderPri(); update();
+  }
+  renderPri();
+
+  /* ---------- fields ---------- */
+  var FIELDS = ["school","tier","major","gpa","gpaScale","gpaMethod","langType","langScore","langPlan","gre","targetMajor","intakeYear","budgetAmt","budgetCur","soft"];
+  FIELDS.forEach(function (id) { $(id).addEventListener("input", update); });
+
+  function val(id) { return ($(id).value || "").trim(); }
+
+  /* ---------- prompt builder ---------- */
+  var SYS = [
+    "你是一名资深的欧洲研究生申请顾问。目标：基于我的真实背景，给出【真实存在、当前有效、申请可行】的最优留学方案。",
+    "",
+    "【铁律】",
+    "1. 禁止编造。项目名称、学制、学费、语言/GPA门槛、截止日期等任何具体事实，若非从官网核实，必须标注「【需核实】」，绝不以肯定语气陈述；宁可说不确定，也不编好看的数字。",
+    "2. 以大学官网为准，第三方信息只作线索。给结论时附官方链接与查询日期，并注明适用学年。",
+    "3. 区分「事实」（需来源）与「判断」（你的专业意见，说明依据）。",
+    "4. 主动暴露风险：定位过高、预算不足、截止已过、背景短板，第一时间点明。",
+    "5. 涉及学费/截止/项目是否开设等时效信息，联网核实当年数据；不能联网时，明确告诉我「这条无法核实，请以官网为准」。",
+    "",
+    "【工作流程】",
+    "1. 画像定位：诚实评估我在欧洲申请体系中的竞争力档位。",
+    "2. 国家匹配：按预算/语言/就业目标筛 2–4 个最契合国家并说明理由，也点出不合适的国家。",
+    "3. 三档选校（每项联网核实官网）：冲刺 / 匹配 / 保底。",
+    "4. 每个项目用卡片输出：项目官方全称｜国家城市｜学制学位｜授课语言及门槛｜学费(学年/币种)｜生活费估算｜核心申请要求(GPA门槛/前置课程/GRE/作品集)｜截止日期(是否分轮/是否已过)｜定位(冲刺/匹配/保底及理由)｜为什么适合我｜官方链接｜查询日期。",
+    "5. 行动时间线：从现在倒推到截止日期的关键节点（语言/文书/推荐信/网申/材料认证如 APS·WES·uni-assist/签证）。",
+    "6. 风险与替代方案：列出最大的 2–3 个风险及应对；若整体定位不现实，给出退一步的可行路线。",
+    "",
+    "【边界】不承诺录取结果；不协助伪造材料或代写成品（可指导文书结构与思路）；每轮结束主动提示下一步我能做什么。",
+    ""
+  ].join("\n");
+
+  function line(label, v) { return v ? ("- " + label + "：" + v) : ""; }
+
+  function buildBackground() {
+    var L = [];
+    var gpaBits = [val("gpa"), val("gpaScale"), val("gpaMethod")].filter(Boolean).join(" / ");
+    var langBits;
+    if (val("langType") === "暂无成绩") {
+      langBits = "暂无" + (val("langPlan") ? "（计划考试：" + val("langPlan") + "）" : "");
+    } else {
+      langBits = [val("langType"), val("langScore")].filter(Boolean).join(" ");
+    }
+    var budget = [state.budgetScope, [val("budgetAmt"), val("budgetCur")].filter(Boolean).join(" ")].filter(Boolean).join("，");
+
+    L.push(line("本科院校", val("school") + (val("tier") ? "（" + val("tier") + "）" : "")));
+    L.push(line("本科专业", val("major")));
+    L.push(line("GPA / 均分", gpaBits));
+    L.push(line("语言成绩", langBits));
+    L.push(line("GRE / GMAT", val("gre")));
+    L.push(line("目标国家", state.countries.join("、")));
+    L.push(line("目标专业方向", val("targetMajor")));
+    L.push(line("是否跨专业", state.crossMajor));
+    L.push(line("入学时间", val("intakeYear")));
+    L.push(line("预算", budget));
+    L.push(line("奖学金需求", state.scholar));
+    L.push(line("软背景", val("soft")));
+    L.push(line("优先级（降序）", state.priorities.join(" > ")));
+    L.push(line("长期目标", state.goal));
+    return L.filter(Boolean).join("\n");
+  }
+
+  function fullPrompt() {
+    var bg = buildBackground();
+    if (!bg) return SYS + "\n我的背景如下：\n【请在左侧表单填写你的信息】";
+    return SYS + "\n我的背景如下：\n" + bg + "\n\n请按上面的工作流程给我完整方案。";
+  }
+
+  function update() {
+    $("promptOut").textContent = fullPrompt();
+    save();
+  }
+
+  /* ---------- persistence ---------- */
+  function save() {
+    try {
+      var data = { state: state };
+      FIELDS.forEach(function (id) { data[id] = $(id).value; });
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
+    } catch (e) {}
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      if (data.state) {
+        state.countries = data.state.countries || [];
+        state.crossMajor = data.state.crossMajor || "";
+        state.goal = data.state.goal || "";
+        state.budgetScope = data.state.budgetScope || "";
+        state.scholar = data.state.scholar || "";
+        if (Array.isArray(data.state.priorities) && data.state.priorities.length === state.priorities.length)
+          state.priorities = data.state.priorities;
+      }
+      FIELDS.forEach(function (id) { if (typeof data[id] === "string") $(id).value = data[id]; });
+      syncChips("countries", COUNTRIES, "countries", true);
+      syncChips("crossMajor", ["接受跨专业","不跨专业"], "crossMajor", false);
+      syncChips("goal", ["回国就业","欧洲就业","继续读博","移民","未定"], "goal", false);
+      syncChips("budgetScope", ["仅学费","学费+生活费"], "budgetScope", false);
+      syncChips("scholar", ["必须有","最好有","无所谓"], "scholar", false);
+      renderPri();
+    } catch (e) {}
+  }
+  load();
+  update();
+
+  /* ---------- toast ---------- */
+  var toastT;
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove("show"); }, 1800);
+  }
+
+  /* ---------- copy ---------- */
+  $("copyBtn").addEventListener("click", function () {
+    var text = fullPrompt();
+    function fallback() {
+      try {
+        var r = document.createRange(); r.selectNodeContents($("promptOut"));
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        toast("已选中，请按 Ctrl/⌘+C 复制");
+      } catch (e) { toast("复制失败，请手动选择"); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast("已复制到剪贴板 ✓"); }, fallback);
+    } else { fallback(); }
+  });
+
+  /* ---------- reset ---------- */
+  $("resetBtn").addEventListener("click", function () {
+    FIELDS.forEach(function (id) { $(id).value = ""; });
+    state.countries = []; state.crossMajor = ""; state.goal = ""; state.budgetScope = ""; state.scholar = "";
+    state.priorities = ["排名","费用","就业前景","移民/工签","英语授课","城市/生活","奖学金"];
+    buildChips("countries", COUNTRIES, "countries", true);
+    buildChips("crossMajor", ["接受跨专业","不跨专业"], "crossMajor", false);
+    buildChips("goal", ["回国就业","欧洲就业","继续读博","移民","未定"], "goal", false);
+    buildChips("budgetScope", ["仅学费","学费+生活费"], "budgetScope", false);
+    buildChips("scholar", ["必须有","最好有","无所谓"], "scholar", false);
+    renderPri(); update(); toast("已清空");
+  });
+
+  /* ---------- tabs ---------- */
+  function selectTab(which) {
+    var p = which === "prompt";
+    $("tabPrompt").setAttribute("aria-selected", p ? "true" : "false");
+    $("tabAI").setAttribute("aria-selected", p ? "false" : "true");
+    $("viewPrompt").hidden = !p;
+    $("viewAI").hidden = p;
+  }
+  $("tabPrompt").addEventListener("click", function () { selectTab("prompt"); });
+  $("tabAI").addEventListener("click", function () { selectTab("ai"); });
+
+  /* ---------- theme toggle ---------- */
+  $("themeBtn").addEventListener("click", function () {
+    var root = document.documentElement;
+    var cur = root.getAttribute("data-theme");
+    var isDark = cur ? cur === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    root.setAttribute("data-theme", isDark ? "light" : "dark");
+  });
+
+  /* ---------- AI preliminary assessment (sample capability) ---------- */
+  var sampleFn = null, ctl = null;
+  var md = function (s) {
+    var esc = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    esc = esc.replace(/^###?\s*(.+)$/gm, "<h3>$1</h3>");
+    esc = esc.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    var blocks = esc.split(/\n{2,}/).map(function (b) {
+      if (/^<h3>/.test(b)) return b;
+      return "<p>" + b.replace(/\n/g, "<br>") + "</p>";
+    }).join("");
+    return (window.DOMPurify ? DOMPurify.sanitize(blocks) : blocks);
+  };
+
+  (async function initAI() {
+    try {
+      if (window.claude && window.claude.use) sampleFn = await window.claude.use("sample");
+    } catch (e) { sampleFn = null; }
+    if (!sampleFn) {
+      $("askBtn").disabled = true;
+      $("aiNotice").innerHTML = "此处的在线评估只在 claude.ai 的 Artifact 里可用。当前环境不可用——请使用左侧「生成的指令」，复制到联网的 Claude 对话。";
+      $("aiOut").innerHTML = '<p class="placeholder">在线评估在当前环境不可用。</p>';
+    }
+  })();
+
+  function aiInput() {
+    var bg = buildBackground();
+    return [
+      "你是资深欧洲研究生留学顾问。基于下面的学生背景，给出【方向性的初步评估】。",
+      "严格要求：你现在【无法联网】，所以【绝对不要】给出任何具体项目名称、学费数字、截止日期或你不确定的硬性门槛——那些会误导人。只做方法论层面的判断。",
+      "请用中文，分四部分、用 ### 作小标题：",
+      "### 竞争力画像  （结合院校层次/均分/语言/软背景，诚实评估在欧洲申请体系中的大致档位）",
+      "### 推荐国家方向  （从预算/语言/就业目标出发，推荐 2–4 个国家体系并说明理由，也点出不合适的）",
+      "### 策略建议  （冲刺/匹配/保底应如何分布；跨专业可行性；该主打哪类项目）",
+      "### 下一步 & 需补强  （最该补的短板，以及提醒：具体选校/学费/截止请用生成的指令到联网 Claude 核实）",
+      "",
+      "学生背景：",
+      bg
+    ].join("\n");
+  }
+
+  $("askBtn").addEventListener("click", async function () {
+    if (!sampleFn) return;
+    if (!buildBackground()) { toast("请先填写左侧表单"); selectTab("ai"); return; }
+    var out = $("aiOut");
+    $("askBtn").disabled = true; $("stopBtn").hidden = false;
+    out.innerHTML = '<p class="placeholder">正在思考中……（约 10–60 秒）</p>';
+    ctl = new AbortController();
+    try {
+      var res = await sampleFn(aiInput(), {
+        modelTier: "default",
+        signal: ctl.signal,
+        onText: function (u) { out.innerHTML = md(u.text); out.scrollTop = out.scrollHeight; }
+      });
+      out.innerHTML = md(res.text) + '<p class="placeholder">—— 以上为不联网的方向性评估。具体项目/学费/截止请用左侧指令到联网 Claude 核实。</p>';
+      if (res.truncated) out.innerHTML += '<p class="placeholder">（内容较长被截断，可再问一次细化某一部分。）</p>';
+    } catch (e) {
+      var code = (e && e.code) || "upstream_error";
+      var partial = (e && e.text) ? md(e.text) : "";
+      if (code === "cancelled") { out.innerHTML = partial || '<p class="placeholder">已停止。</p>'; }
+      else if (code === "not_granted" || code === "sampling_disabled") {
+        out.innerHTML = '<p class="placeholder">你未授权本页面使用 Claude，或该账户不可用。请改用左侧「生成的指令」。</p>';
+        $("askBtn").disabled = true;
+      } else if (code === "rate_limited") {
+        out.innerHTML = (partial || "") + '<p class="placeholder">请求过于频繁，请稍后再试。</p>';
+      } else {
+        out.innerHTML = (partial || "") + '<p class="placeholder">暂时出错了，请稍后重试。</p>';
+      }
+    } finally {
+      $("askBtn").disabled = !sampleFn; $("stopBtn").hidden = true; ctl = null;
+    }
+  });
+  $("stopBtn").addEventListener("click", function () { if (ctl) ctl.abort(); });
+})();
+</script>
+
+</body>
+</html>
